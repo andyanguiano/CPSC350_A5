@@ -103,9 +103,13 @@ void DataBaseSim::selection(){
         cout << endl;
       }
     }else if(choice == "7"){
-      
+      addStudent();
     }else if(choice == "8"){
-
+      if(m_students->isEmpty()){
+        cout << "There are no students to delete." << endl;
+      }else{
+        deleteStudent();
+      }
     }else if(choice == "9"){
 
     }else if(choice == "10"){
@@ -207,9 +211,68 @@ void DataBaseSim::adviseeInfo(Faculty* f){
 }
 
 void DataBaseSim::addStudent(){
+  int id = 0;
+  cout << "ID of the new student: ";
+  cin >> id;
+  cout << endl;
+  string name = "";
+  cout << "Name of the student: ";
+  cin >> name;
+  cout << endl;
+  string level = "";
+  cout << "Level of the student: ";
+  cin >> level;
+  cout << endl;
+  string major = "";
+  cout << "Major of the student: ";
+  cin >> major;
+  cout << endl;
+  double gpa = 0.0;
+  cout << "GPA of student: ";
+  cin >> gpa;
+  cout << endl;
+  cout << "Here are all the advisors: " << endl;
+  TreeNode<Faculty>* root = m_faculty->getRoot();
+  printFaculty(root);
+  int advisor = 0;
+  cout << "What is the advisors ID number: " << endl;
+  cin >> advisor;
+  cout << endl;
+  Faculty* f = m_faculty->search(advisor);
+  while(true){
+    if(f != NULL){
+      f->getAdvisees()->insertFront(id);
+      Student* s = new Student(id, name, level, major, gpa, advisor);
+      m_students->insert(id, s);
+      cout << endl;
+      break;
+    }else{
+      cout << "Invalid advisor ID. Try again: ";
+      cin >> advisor;
+      cout << endl;
+      f = m_faculty->search(advisor);
+    }
+  }
+}
+
+void DataBaseSim::deleteStudent(){
+  int id = 0;
+  cout << "What is the ID of the student: " << endl;
+  cin >> id;
+  cout << endl;
+
+  Student* s = m_students->search(id);
+  if(s != NULL){
+    int facultyID = s->getAdvisor();
+    m_students->deleteNode(id);
+    cout << "Deleted Student." << endl;
+    Faculty* f = m_faculty->search(facultyID);
+    f->getAdvisees()->remove(id);
+  }else{
+    cout << "This student does not exist." << endl;
+  }
 
 }
-void DataBaseSim::deleteStudent(){}
 void DataBaseSim::addFaculty(){}
 void DataBaseSim::deleteFaculty(){}
 void DataBaseSim::changeAdvisor(){}

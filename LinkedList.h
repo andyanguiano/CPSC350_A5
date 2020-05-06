@@ -9,13 +9,13 @@ class LinkedList{
     void insertFront(T data);
     T removeFront();
     int search(T val); //return position of ListNode
-    T* remove(T val);
+    T remove(T val);
 
     unsigned int getSize();
     bool isEmpty();
     void printList();
     ListNode<T>* front;
-    
+
     unsigned int size;
 };
 
@@ -96,7 +96,7 @@ int LinkedList<T>::search(T val){
 }
 
 template <class T>
-T* LinkedList<T>::remove(T val){
+T LinkedList<T>::remove(T val){
   //error to make sure pos does not exceed size of listnode
   ListNode<T> *curr;
   ListNode<T> *prev = front;
@@ -113,7 +113,7 @@ T* LinkedList<T>::remove(T val){
   //continue with the delete process
   prev->next = curr->next;
   curr->next = NULL;
-  T* temp = curr->data;
+  T temp = curr->data;
   delete curr;
   size--;
 
