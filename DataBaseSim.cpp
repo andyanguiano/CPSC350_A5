@@ -402,4 +402,7 @@ void DataBaseSim::removeAdvisee(){
     cout << "This faculty member does not exist.";
   }
 }
-void DataBaseSim::rollBack(){}
+
+void DataBaseSim::rollBack(){
+  
+}
