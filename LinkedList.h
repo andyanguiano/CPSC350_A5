@@ -14,9 +14,8 @@ class LinkedList{
     unsigned int getSize();
     bool isEmpty();
     void printList();
-
-  private:
     ListNode<T>* front;
+    
     unsigned int size;
 };
 
