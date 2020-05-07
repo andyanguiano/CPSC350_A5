@@ -10,6 +10,7 @@ class LinkedList{
     T removeFront();
     int search(T val); //return position of ListNode
     T remove(T val);
+    bool searchBool(T val);
 
     unsigned int getSize();
     bool isEmpty();
@@ -93,6 +94,19 @@ int LinkedList<T>::search(T val){
       pos = -1;
     }
     return pos;
+}
+
+template <class T>
+bool LinkedList<T>::searchBool(T val){
+  bool myBool = false;
+  ListNode<T> *curr = front;
+  while(curr != NULL){
+    if(curr->data == val){
+      myBool = true;
+      break;
+    }
+  }
+  return myBool;
 }
 
 template <class T>

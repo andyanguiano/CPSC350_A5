@@ -37,6 +37,7 @@ void DataBaseSim::choices(){
 void DataBaseSim::selection(){
   string choice = "";
   while(choice != "14"){
+    choices();
     cout << "Enter input: ";
     cin >> choice;
     cout << endl;
@@ -45,14 +46,18 @@ void DataBaseSim::selection(){
       TreeNode<Student>* root = m_students->getRoot();
       if(root == NULL){
         cout << "Students database is empty." << endl;
+        cout << endl;
       }else{
+        cout << "Here are all of the Students: " << endl;
         printStudents(root);
       }
     }else if(choice == "2"){
       TreeNode<Faculty>* root = m_faculty->getRoot();
       if(root == NULL){
         cout << "Faculty database is empty" << endl;
+        cout << endl;
       }else{
+        cout << "Here are all the faculty members: " << endl;
         printFaculty(root);
       }
     }else if(choice == "3"){
@@ -92,7 +97,7 @@ void DataBaseSim::selection(){
       }
     }else if(choice == "6"){
       int id = 0;
-      cout << "ID of the student: ";
+      cout << "ID of the faculty member: ";
       cin >> id;
       cout << endl;
       Faculty* f = m_faculty->search(id);
@@ -111,19 +116,23 @@ void DataBaseSim::selection(){
         deleteStudent();
       }
     }else if(choice == "9"){
-      addFaculty();
+      addFaculty(); //need to fix advisee stuff
     }else if(choice == "10"){
       if(m_faculty->isEmpty()){
         cout << "There are no faculty members to delete" << endl;
+        cout << endl;
       }else{
         deleteFaculty();
-      }
+      } //seg fault
     }else if(choice == "11"){
       changeAdvisor();
     }else if(choice == "12"){
       removeAdvisee();
     }else if(choice == "13"){
 
+    }else if(choice == "14"){
+      cout << "Saving Changes..." << endl;
+      cout << "Done." << endl;
     }else{
       cout << "That was not an option please try again." << endl;
     }
@@ -131,8 +140,10 @@ void DataBaseSim::selection(){
 }
 
 void DataBaseSim::printStudents(TreeNode<Student>* s){
-  cout << "Here are all of the Students: " << endl;
-  cout << endl;
+
+  if(s == NULL){
+    return;
+  }
   printStudents(s->left);
   Student* student = s->data;
   cout << "ID: " << student->getID() << endl;
@@ -146,8 +157,10 @@ void DataBaseSim::printStudents(TreeNode<Student>* s){
 }
 
 void DataBaseSim::printFaculty(TreeNode<Faculty>* f){
-  cout << "Here are all the faculty members: " << endl;
-  cout << endl;
+
+  if(f == NULL){
+    return;
+  }
   printFaculty(f->left);
   Faculty* faculty = f->data;
   cout << "ID: " << faculty->getID() << endl;
@@ -214,23 +227,30 @@ void DataBaseSim::addStudent(){
   int id = 0;
   cout << "ID of the new student: ";
   cin >> id;
-  cout << endl;
   string name = "";
   cout << "Name of the student: ";
-  cin >> name;
-  cout << endl;
+  cin.ignore();
+  getline(cin, name);
   string level = "";
   cout << "Level of the student: ";
-  cin >> level;
-  cout << endl;
+  cin.ignore();
+  getline(cin, level);
   string major = "";
   cout << "Major of the student: ";
-  cin >> major;
-  cout << endl;
+  cin.ignore();
+  getline(cin, major);
   double gpa = 0.0;
   cout << "GPA of student: ";
   cin >> gpa;
-  cout << endl;
+  if(m_faculty->getRoot() == NULL){
+    cout << "There is no faculty to set an advisor to this student." << endl;
+    int advisor = 0;
+    Student* s = new Student(id, name, level, major, gpa, advisor);
+    m_students->insert(id, s);
+    cout << "Student added to database." << endl;
+    cout << endl;
+    return;
+  }
   cout << "Here are all the advisors: " << endl;
   TreeNode<Faculty>* root = m_faculty->getRoot();
   printFaculty(root);
@@ -244,6 +264,7 @@ void DataBaseSim::addStudent(){
       f->getAdvisees()->insertFront(id);
       Student* s = new Student(id, name, level, major, gpa, advisor);
       m_students->insert(id, s);
+      cout << "Student added to database." << endl;
       cout << endl;
       break;
     }else{
@@ -257,40 +278,39 @@ void DataBaseSim::addStudent(){
 
 void DataBaseSim::deleteStudent(){
   int id = 0;
-  cout << "What is the ID of the student: " << endl;
+  cout << "What is the ID of the student: ";
   cin >> id;
   cout << endl;
 
   Student* s = m_students->search(id);
   if(s != NULL){
-    int facultyID = s->getAdvisor();
-    m_students->deleteNode(id);
+    if(s->getAdvisor() != 0){
+      int facultyID = s->getAdvisor();
+      m_students->deleteNode(id);
+      Faculty* f = m_faculty->search(facultyID);
+      f->getAdvisees()->remove(id);
+    }
     cout << "Deleted Student." << endl;
-    Faculty* f = m_faculty->search(facultyID);
-    f->getAdvisees()->remove(id);
+    cout << endl;
   }else{
     cout << "This student does not exist." << endl;
+    cout << endl;
   }
-
 }
 
 void DataBaseSim::addFaculty(){
   int id = 0;
   cout << "ID of the new faculty member: ";
   cin >> id;
-  cout << endl;
   string name = "";
   cout << "Name of the faculty member: ";
   cin >> name;
-  cout << endl;
   string level = "";
   cout << "Level of the faculty member: ";
   cin >> level;
-  cout << endl;
   string department = "";
   cout << "Department of the faculty member: ";
   cin >> department;
-  cout << endl;
   Faculty* f = new Faculty(id, name, level, department);
   m_faculty->insert(id, f);
   //not sure how to do advisee stuff
@@ -404,5 +424,5 @@ void DataBaseSim::removeAdvisee(){
 }
 
 void DataBaseSim::rollBack(){
-  
+
 }
