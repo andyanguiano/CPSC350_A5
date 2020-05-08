@@ -5,7 +5,7 @@ Faculty::Faculty(){
   m_name = "";
   m_level = "";
   m_department = "";
-  m_advisees = NULL;
+  m_advisees = new LinkedList<int>();
 }
 
 Faculty::Faculty(int id, string name, string level, string department){
@@ -13,6 +13,7 @@ Faculty::Faculty(int id, string name, string level, string department){
   m_name = name;
   m_level = level;
   m_department = department;
+  m_advisees = new LinkedList<int>();
 }
 
 Faculty::~Faculty(){
@@ -58,6 +59,21 @@ void Faculty::setAdvisees(LinkedList<int>* advisees){
 
 LinkedList<int>* Faculty::getAdvisees(){
   return m_advisees;
+}
+
+string Faculty::adviseesForFile(){
+  string advisees = "";
+  if(m_advisees->isEmpty()){
+    advisees = "e";
+  }else{
+    ListNode<int>* curr = m_advisees->front;
+    while(curr != NULL){
+      int id = curr->data;
+      advisees += to_string(id) + " ";
+      curr = curr->next;
+    }
+  }
+  return advisees;
 }
 
 int Faculty::comapareTo(Faculty *f){

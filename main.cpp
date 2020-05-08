@@ -1,11 +1,9 @@
-#include "DataBaseSim.h"
+#include "FileIO.h"
 
 int main(int argc, char **argv) {
-  BST<Student>* students = new BST<Student>();
-  BST<Faculty>* faculty = new BST<Faculty>();
+  FileIO* run = new FileIO();
 
-  DataBaseSim* sim = new DataBaseSim(students, faculty);
+  run->checkIfNew();
 
-  sim->selection();
   return 0;
 }

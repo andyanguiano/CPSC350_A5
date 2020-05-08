@@ -37,6 +37,7 @@ void DataBaseSim::choices(){
 void DataBaseSim::selection(){
   string choice = "";
   while(choice != "14"){
+    cout << endl;
     choices();
     cout << "Enter input: ";
     cin >> choice;
@@ -116,14 +117,14 @@ void DataBaseSim::selection(){
         deleteStudent();
       }
     }else if(choice == "9"){
-      addFaculty(); //need to fix advisee stuff
+      addFaculty();
     }else if(choice == "10"){
       if(m_faculty->isEmpty()){
         cout << "There are no faculty members to delete" << endl;
         cout << endl;
       }else{
         deleteFaculty();
-      } //seg fault
+      }
     }else if(choice == "11"){
       changeAdvisor();
     }else if(choice == "12"){
@@ -168,9 +169,13 @@ void DataBaseSim::printFaculty(TreeNode<Faculty>* f){
   cout << "Level: " << faculty->getLevel() << endl;
   cout << "Department: " << faculty->getDepartment() << endl;
   cout << "List of advisees ID: ";
-  LinkedList<int>* advisee = faculty->getAdvisees();
-  if(!advisee->isEmpty()){
-    advisee->printList();
+  if(!m_students->isEmpty()){
+    LinkedList<int>* advisee = faculty->getAdvisees();
+    if(!advisee->isEmpty()){
+      advisee->printList();
+    }
+  }else{
+    cout << "None" << endl;
   }
   cout << endl;
   printFaculty(f->right);
@@ -251,11 +256,12 @@ void DataBaseSim::addStudent(){
     cout << endl;
     return;
   }
+  cout << endl;
   cout << "Here are all the advisors: " << endl;
   TreeNode<Faculty>* root = m_faculty->getRoot();
   printFaculty(root);
   int advisor = 0;
-  cout << "What is the advisors ID number: " << endl;
+  cout << "What is the advisors ID number: ";
   cin >> advisor;
   cout << endl;
   Faculty* f = m_faculty->search(advisor);
@@ -313,10 +319,11 @@ void DataBaseSim::addFaculty(){
   cin >> department;
   Faculty* f = new Faculty(id, name, level, department);
   m_faculty->insert(id, f);
-  //not sure how to do advisee stuff
+  cout << "Faculty memeber added." << endl;
 }
 
 void DataBaseSim::deleteFaculty(){
+  //could set if no other advisees available to redistribute
   int id = 0;
   cout << "What is the ID of the faculty member to be deleted: ";
   cin >> id;
@@ -353,6 +360,7 @@ void DataBaseSim::deleteFaculty(){
         }
       }
     }
+  m_faculty->deleteNode(id);
   }else{
     cout << "This faculty member does not exist." << endl;
     cout << endl;
@@ -425,4 +433,12 @@ void DataBaseSim::removeAdvisee(){
 
 void DataBaseSim::rollBack(){
 
+}
+
+BST<Student>* DataBaseSim::getStudetTree(){
+  return m_students;
+}
+
+BST<Faculty>* DataBaseSim::getFacultyTree(){
+  return m_faculty;
 }

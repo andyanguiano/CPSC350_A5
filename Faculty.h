@@ -23,6 +23,8 @@ class Faculty{
     void setAdvisees(LinkedList<int>* advisees);
     LinkedList<int>* getAdvisees();
 
+    string adviseesForFile();
+
     int comapareTo(Faculty *f);
 
   private:

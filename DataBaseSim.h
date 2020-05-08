@@ -24,6 +24,9 @@ class DataBaseSim{
     void removeAdvisee(); //Remove an advisee from a faculty member given the ids
     void rollBack(); //Rollback
 
+    BST<Student>* getStudetTree();
+    BST<Faculty>* getFacultyTree();
+
 
   private:
     BST<Student>* m_students;

@@ -47,7 +47,7 @@ void LinkedList<T>::printList(){
   ListNode<T> *current = front;
 
   while(current != NULL){
-    cout << current->data << endl;
+    cout << current->data;
     current = current->next;//listnode
   }
 }
