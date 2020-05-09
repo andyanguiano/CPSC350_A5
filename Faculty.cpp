@@ -73,6 +73,7 @@ string Faculty::adviseesForFile(){
       curr = curr->next;
     }
   }
+  cout << "ADVISE: " << advisees << endl;
   return advisees;
 }
 

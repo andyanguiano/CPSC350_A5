@@ -178,6 +178,7 @@ void DataBaseSim::printFaculty(TreeNode<Faculty>* f){
     cout << "None" << endl;
   }
   cout << endl;
+  cout << endl;
   printFaculty(f->right);
 }
 
@@ -234,16 +235,13 @@ void DataBaseSim::addStudent(){
   cin >> id;
   string name = "";
   cout << "Name of the student: ";
-  cin.ignore();
-  getline(cin, name);
+  cin >> name;
   string level = "";
   cout << "Level of the student: ";
-  cin.ignore();
-  getline(cin, level);
+  cin >> level;
   string major = "";
   cout << "Major of the student: ";
-  cin.ignore();
-  getline(cin, major);
+  cin >> major;
   double gpa = 0.0;
   cout << "GPA of student: ";
   cin >> gpa;

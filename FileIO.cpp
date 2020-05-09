@@ -34,18 +34,14 @@ void FileIO::traverseFaculty(TreeNode<Faculty>* node, ofstream &o){
 
 void FileIO::checkIfNew(){
   infs.open(m_facultyFile);
-
   if(!infs.is_open()){
     //file is empty
     infs.close();
-
     //begin simulation
     DataBaseSim* sim = new DataBaseSim(studentTree, facultyTree);
     sim->selection();
-
     studentTree = sim->getStudetTree();
     facultyTree = sim->getFacultyTree();
-
     serialize();
   }else{
     infs.close();
@@ -54,10 +50,8 @@ void FileIO::checkIfNew(){
 
     DataBaseSim* sim = new DataBaseSim(studentTree, facultyTree);
     sim->selection();
-
     studentTree = sim->getStudetTree();
     facultyTree = sim->getFacultyTree();
-
     serialize();
   }
 }
@@ -80,7 +74,8 @@ void FileIO::deserialize(){
 
   while(!infs.eof()){
     getline(infs, line);
-    if(infs.fail()){
+
+    if(!infs.fail()){
       int size = line.size();
 
       string idstr = "";
@@ -97,6 +92,7 @@ void FileIO::deserialize(){
       bool advisorCheck = true;
 
       int i = 0;
+
       while(true){
         if(line[i] == '|'){
           ++i;
@@ -160,6 +156,7 @@ void FileIO::deserialize(){
       int id = stoi(idstr);
       double gpa = stof(gpastr);
       int advisor = stoi(advisorstr);
+
       Student* s = new Student(id, name, level, major, gpa, advisor);
       studentTree->insert(id, s);
     }
@@ -172,7 +169,7 @@ void FileIO::deserialize(){
 
   while(!infs.eof()){
     getline(infs, line2);
-    if(infs.fail()){
+    if(!infs.fail()){
       int size = line2.size();
 
       string idstr = "";
@@ -223,11 +220,15 @@ void FileIO::deserialize(){
           ++i2;
         }
       }
-
+      //SAVES BUT DOES NOT READ IT RIGHT
       if(line2[i2] == 'e'){
-        continue;
+        cout << "HERE" << endl;
+        int id = stoi(idstr);
+        Faculty* f = new Faculty(id, name, level, department);
+        facultyTree->insert(id, f);
       }else{
         while(true){
+          cout << "HERE2" << endl;
           if(line2[i2] == '|'){
             ++i2;
             break;
@@ -242,12 +243,11 @@ void FileIO::deserialize(){
             ++i2;
           }
         }
+        int id = stoi(idstr);
+        Faculty* f = new Faculty(id, name, level, department);
+        f->setAdvisees(advisees);
+        facultyTree->insert(id, f);
       }
-
-      int id = stoi(idstr);
-      Faculty* f = new Faculty(id, name, level, department);
-      f->setAdvisees(advisees);
-      facultyTree->insert(id, f);
     }
   }
   infs.close();

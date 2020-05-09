@@ -1,6 +1,8 @@
 #include "DataBaseSim.h"
 #include <fstream>
 
+using namespace std;
+
 class FileIO{
   public:
     FileIO();
