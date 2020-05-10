@@ -3,6 +3,7 @@
 DataBaseSim::DataBaseSim(){
   m_students = new BST<Student>();
   m_faculty = new BST<Faculty>();
+  m_rollback = new Rollback();
 }
 
 DataBaseSim::DataBaseSim(BST<Student>* students, BST<Faculty>* faculty){
@@ -13,6 +14,7 @@ DataBaseSim::DataBaseSim(BST<Student>* students, BST<Faculty>* faculty){
 DataBaseSim::~DataBaseSim(){
   delete m_students;
   delete m_faculty;
+  delete m_rollback;
 }
 
 void DataBaseSim::choices(){
@@ -130,7 +132,7 @@ void DataBaseSim::selection(){
     }else if(choice == "12"){
       removeAdvisee();
     }else if(choice == "13"){
-
+      rollBack();
     }else if(choice == "14"){
       cout << "Saving Changes..." << endl;
       cout << "Done." << endl;
@@ -267,6 +269,7 @@ void DataBaseSim::addStudent(){
     if(f != NULL){
       f->getAdvisees()->insertFront(id);
       Student* s = new Student(id, name, level, major, gpa, advisor);
+      m_rollback->addStudentAction(s, "delete student");
       m_students->insert(id, s);
       cout << "Student added to database." << endl;
       cout << endl;
@@ -291,6 +294,7 @@ void DataBaseSim::deleteStudent(){
     if(s->getAdvisor() != 0){
       int facultyID = s->getAdvisor();
       m_students->deleteNode(id);
+      m_rollback->addStudentAction(s, "add student");
       Faculty* f = m_faculty->search(facultyID);
       f->getAdvisees()->remove(id);
     }
@@ -317,6 +321,7 @@ void DataBaseSim::addFaculty(){
   cin >> department;
   Faculty* f = new Faculty(id, name, level, department);
   m_faculty->insert(id, f);
+  m_rollback->addFacultyAction(f, "add faculty");
   cout << "Faculty memeber added." << endl;
 }
 
@@ -359,6 +364,7 @@ void DataBaseSim::deleteFaculty(){
       }
     }
   m_faculty->deleteNode(id);
+  m_rollback->addFacultyAction(f, "delete faculty");
   }else{
     cout << "This faculty member does not exist." << endl;
     cout << endl;
@@ -430,7 +436,32 @@ void DataBaseSim::removeAdvisee(){
 }
 
 void DataBaseSim::rollBack(){
-
+  if(m_rollback->isEmpty()){
+    cout << "There are no actions to undo." << endl;
+  }else{
+    string type = m_rollback->undo();
+    if(type == "add student"){
+      Student* s = m_rollback->popStudent();
+      addStudentRollback(s);
+      cout << "Added Student." << endl;
+      cout << endl;
+    }else if(type == "delete student"){
+      Student* s = m_rollback->popStudent();
+      deleteStudentRollback(s);
+      cout << "Deleted Student." << endl;
+      cout << endl;
+    }else if(type == "add faculty"){
+      Faculty* f = m_rollback->popFaculty();
+      addFacultyRollback(f);
+      cout << "Added Faculty" << endl;
+      cout << endl;
+    }else{
+      Faculty* f = m_rollback->popFaculty();
+      deleteFacultyRollBack(f);
+      cout << "Deleted Faculty." << endl;
+      cout << endl;
+    }
+  }
 }
 
 BST<Student>* DataBaseSim::getStudetTree(){
@@ -439,4 +470,74 @@ BST<Student>* DataBaseSim::getStudetTree(){
 
 BST<Faculty>* DataBaseSim::getFacultyTree(){
   return m_faculty;
+}
+
+void DataBaseSim::deleteStudentRollback(Student* s){
+  int id = s->getID();
+  int facultyID = s->getAdvisor();
+  m_students->deleteNode(id);
+  Faculty* f = m_faculty->search(facultyID);
+  f->getAdvisees()->remove(id);
+}
+
+void DataBaseSim::addStudentRollback(Student* s){
+  int id = s->getID();
+  int facultyID = s->getAdvisor();
+  m_students->insert(id, s);
+  if(facultyID != 0){
+    Faculty* f = m_faculty->search(facultyID);
+    if(f != NULL){
+      f->getAdvisees()->insertFront(s->getID());
+    }
+  }
+}
+
+void DataBaseSim::deleteFacultyRollBack(Faculty* f){
+  int id = f->getID();
+
+
+  if(f != NULL){
+    Faculty* temp = f;
+    //m_faculty->deleteNode(id);
+    cout << "Deleted Faculty Member." << endl;
+    if(!temp->getAdvisees()->isEmpty()){
+      if(!m_faculty->isEmpty()){
+        TreeNode<Faculty>* root = m_faculty->getRoot();
+        printFaculty(root);
+        int newID = 0;
+        cout << "What faculty member would you like to transfer advisees to?(id): ";
+        cin >> newID;
+        cout << endl;
+        Faculty* newFaculty = m_faculty->search(newID);
+        while(newFaculty == NULL){
+          cout << "The faculty ID you entered does not exists. Try again: " << endl;
+          cin >> newID;
+          newFaculty = m_faculty->search(newID);
+        }
+        //redistribute advisees
+        ListNode<int>* curr = temp->getAdvisees()->front;
+        while(curr != NULL){
+          int currID = curr->data;
+          Student* s = m_students->search(currID);
+          s->setAdvisor(newID);
+          newFaculty->getAdvisees()->insertFront(currID);
+          curr = curr->next;
+        }
+      }
+    }
+    m_faculty->deleteNode(id);
+  }
+}
+
+void DataBaseSim::addFacultyRollback(Faculty* f){
+  int id = f->getID();
+  m_faculty->insert(id, f);
+  LinkedList<int>* adviseess = f->getAdvisees();
+  ListNode<int>* current = adviseess->front;
+  while(current != NULL){
+    int studentID = current->data;
+    Student* s = m_students->search(studentID);
+    s->setAdvisor(f->getID());
+    current = current->next;
+  }
 }

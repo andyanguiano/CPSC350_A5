@@ -1,6 +1,5 @@
-#include "Student.h"
-#include "Faculty.h"
 #include "BST.h"
+#include "Rollback.h"
 
 class DataBaseSim{
   public:
@@ -27,9 +26,14 @@ class DataBaseSim{
     BST<Student>* getStudetTree();
     BST<Faculty>* getFacultyTree();
 
+    void deleteStudentRollback(Student* s);
+    void addStudentRollback(Student *s);
+    void deleteFacultyRollBack(Faculty* f);
+    void addFacultyRollback(Faculty* s);
 
   private:
     BST<Student>* m_students;
     BST<Faculty>* m_faculty;
+    Rollback* m_rollback;
 
 };
