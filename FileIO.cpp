@@ -233,7 +233,6 @@ void FileIO::deserialize(){
             ++i2;
             break;
           }else if(line2[i2] =! ' '){
-            cout << "ADVISEE: " << adviseestr << endl;
             int advisee = stoi(adviseestr);
             advisees->insertFront(advisee);
             adviseestr = "";

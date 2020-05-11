@@ -269,7 +269,7 @@ void DataBaseSim::addStudent(){
     if(f != NULL){
       f->getAdvisees()->insertFront(id);
       Student* s = new Student(id, name, level, major, gpa, advisor);
-      m_rollback->addStudentAction(s, "delete student");
+      //m_rollback->addStudentAction(s, "delete student");
       m_students->insert(id, s);
       cout << "Student added to database." << endl;
       cout << endl;
@@ -290,13 +290,18 @@ void DataBaseSim::deleteStudent(){
   cout << endl;
 
   Student* s = m_students->search(id);
+  cout << "1" << endl;
   if(s != NULL){
     if(s->getAdvisor() != 0){
+      cout << "2" << endl;
       int facultyID = s->getAdvisor();
       m_students->deleteNode(id);
-      m_rollback->addStudentAction(s, "add student");
+      cout << "3" << endl;
+      //m_rollback->addStudentAction(s, "add student");
       Faculty* f = m_faculty->search(facultyID);
+      cout << "4" << endl;
       f->getAdvisees()->remove(id);
+      cout << "5" << endl;
     }
     cout << "Deleted Student." << endl;
     cout << endl;
@@ -321,7 +326,7 @@ void DataBaseSim::addFaculty(){
   cin >> department;
   Faculty* f = new Faculty(id, name, level, department);
   m_faculty->insert(id, f);
-  m_rollback->addFacultyAction(f, "add faculty");
+  //m_rollback->addFacultyAction(f, "add faculty");
   cout << "Faculty memeber added." << endl;
 }
 
@@ -364,7 +369,7 @@ void DataBaseSim::deleteFaculty(){
       }
     }
   m_faculty->deleteNode(id);
-  m_rollback->addFacultyAction(f, "delete faculty");
+  //m_rollback->addFacultyAction(f, "delete faculty");
   }else{
     cout << "This faculty member does not exist." << endl;
     cout << endl;

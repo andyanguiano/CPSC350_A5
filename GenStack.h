@@ -26,7 +26,6 @@ class GenStack{
     bool isEmpty();//checks if stack is empty
     bool isFull();//checks is stack is full
     int getSize();//returns size of stack
-    GenStack *allocateMemory();//when a stack is full, returns a larger stack
 
     int top;//holds the value for the top of the stack
     int mSize;//holds the value of the size
@@ -39,11 +38,11 @@ class GenStack{
 //default constructor
 template <class T>
 GenStack<T>::GenStack(){
-  myArray = new T*[500];
-  for(int i = 0; i < 500; ++i){
+  myArray = new T*[1000];
+  for(int i = 0; i < 1000; ++i){
     myArray[i] = new T();
   }
-  mSize = 500;
+  mSize = 1000;
   top = -1;
 }
 
