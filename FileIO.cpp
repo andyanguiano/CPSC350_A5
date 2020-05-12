@@ -222,13 +222,11 @@ void FileIO::deserialize(){
       }
       //SAVES BUT DOES NOT READ IT RIGHT
       if(line2[i2] == 'e'){
-        cout << "HERE" << endl;
         int id = stoi(idstr);
         Faculty* f = new Faculty(id, name, level, department);
         facultyTree->insert(id, f);
       }else{
         while(true){
-          cout << "HERE2" << endl;
           if(line2[i2] == '|'){
             ++i2;
             break;

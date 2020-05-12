@@ -11,6 +11,7 @@ class LinkedList{
     int search(T val); //return position of ListNode
     T remove(T val);
     bool searchBool(T val);
+    void removeAtPos(int pos);
 
     unsigned int getSize();
     bool isEmpty();
@@ -47,9 +48,10 @@ void LinkedList<T>::printList(){
   ListNode<T> *current = front;
 
   while(current != NULL){
-    cout << current->data;
+    cout << current->data << endl;
     current = current->next;//listnode
   }
+  cout << endl;
 }
 
 template <class T>
@@ -123,7 +125,6 @@ T LinkedList<T>::remove(T val){
       break;
     }
   }
-
   //continue with the delete process
   prev->next = curr->next;
   curr->next = NULL;
@@ -132,4 +133,32 @@ T LinkedList<T>::remove(T val){
   size--;
 
   return temp;
+}
+
+template <class T>
+void LinkedList<T>::removeAtPos(int pos){
+  int index = 0;
+  ListNode<T> *curr = front;
+  ListNode<T> *prev = front;
+  while(index != pos){
+    prev = curr;
+    curr = curr->next;
+    index += 1;
+  }
+  if(isEmpty()){
+    return;
+  }else if(size == 1){
+    curr->next = NULL;
+  }else if(pos == 0){
+    front = front->next;
+    curr->next = NULL;
+  }else if(pos == size - 1){
+    prev->next = NULL;
+  }else{
+    prev->next = curr->next;
+    curr->next = NULL;
+  }
+
+  delete curr;
+  size -= 1;
 }

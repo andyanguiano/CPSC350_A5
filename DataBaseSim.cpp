@@ -284,24 +284,29 @@ void DataBaseSim::addStudent(){
 }
 
 void DataBaseSim::deleteStudent(){
+  TreeNode<Student>* root = m_students->getRoot();
+  if(root == NULL){
+    cout << "Students database is empty." << endl;
+    cout << endl;
+  }else{
+    cout << "Here are all of the Students: " << endl;
+    printStudents(root);
+  }
+
   int id = 0;
   cout << "What is the ID of the student: ";
   cin >> id;
   cout << endl;
 
   Student* s = m_students->search(id);
-  cout << "1" << endl;
   if(s != NULL){
     if(s->getAdvisor() != 0){
-      cout << "2" << endl;
       int facultyID = s->getAdvisor();
       m_students->deleteNode(id);
-      cout << "3" << endl;
       //m_rollback->addStudentAction(s, "add student");
       Faculty* f = m_faculty->search(facultyID);
-      cout << "4" << endl;
-      f->getAdvisees()->remove(id);
-      cout << "5" << endl;
+      int pos = f->getAdvisees()->search(id);
+      f->getAdvisees()->removeAtPos(pos);
     }
     cout << "Deleted Student." << endl;
     cout << endl;
@@ -332,6 +337,14 @@ void DataBaseSim::addFaculty(){
 
 void DataBaseSim::deleteFaculty(){
   //could set if no other advisees available to redistribute
+  TreeNode<Faculty>* root = m_faculty->getRoot();
+  if(root == NULL){
+    cout << "Faculty database is empty" << endl;
+    cout << endl;
+  }else{
+    cout << "Here are all the faculty members: " << endl;
+    printFaculty(root);
+  }
   int id = 0;
   cout << "What is the ID of the faculty member to be deleted: ";
   cin >> id;
@@ -385,7 +398,6 @@ void DataBaseSim::changeAdvisor(){
     printStudents(root);
   }
   int studentID = 0;
-  cout << endl;
   cout << "ID of student whose Advisor you would like to change: ";
   cin >> studentID;
   Student* s = m_students->search(studentID);
@@ -403,7 +415,8 @@ void DataBaseSim::changeAdvisor(){
     if(f != NULL){
       m_students->search(studentID)->setAdvisor(facultyID);
       Faculty* oldF = m_faculty->search(currAdvisor);
-      oldF->getAdvisees()->remove(facultyID);
+      int pos = oldF->getAdvisees()->search(studentID);
+      f->getAdvisees()->removeAtPos(pos);
       cout << "Changed Advisors." << endl;
     }else{
       cout << "This faculty member does not exist." << endl;
@@ -415,9 +428,14 @@ void DataBaseSim::changeAdvisor(){
 }
 
 void DataBaseSim::removeAdvisee(){
-  cout << "Here are all the faculty members: " << endl;
   TreeNode<Faculty>* root = m_faculty->getRoot();
-  printFaculty(root);
+  if(root == NULL){
+    cout << "Faculty database is empty" << endl;
+    cout << endl;
+  }else{
+    cout << "Here are all the faculty members: " << endl;
+    printFaculty(root);
+  }
   int id = 0;
   cout << "Which faculty member would you like to change advisees from?(ID): ";
   cin >> id;
@@ -432,7 +450,8 @@ void DataBaseSim::removeAdvisee(){
     cout << "Which advisee would your like to remove?(ID): ";
     cin >> rmid;
     cout << endl;
-    f->getAdvisees()->remove(rmid);
+    int pos = f->getAdvisees()->search(id);
+    f->getAdvisees()->removeAtPos(pos);
     cout << "Removed the advisee." << endl;
     m_students->search(rmid)->setAdvisor(0);
   }else{
