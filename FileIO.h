@@ -3,16 +3,17 @@
 
 using namespace std;
 
+//serialize and deserialize
 class FileIO{
   public:
-    FileIO();
-    ~FileIO();
+    FileIO();//constructor
+    ~FileIO();//destructor
 
-    void traverseStudents(TreeNode<Student>* node, ofstream &o);
-    void traverseFaculty(TreeNode<Faculty>* node, ofstream &o);
-    void checkIfNew();
+    void traverseStudents(TreeNode<Student>* node, ofstream &o); //print student file
+    void traverseFaculty(TreeNode<Faculty>* node, ofstream &o); //print faculty file
+    void checkIfNew();//see if new database
     void serialize();
-    void deserialize();
+    void deserialize();//reads files
 
   private:
     ifstream infs;

@@ -1,12 +1,13 @@
 #include <iostream>
 using namespace std;
 
+//tree node for BST
 template <class T>
 class TreeNode{
   public:
-    TreeNode();
-    TreeNode(int k, T* d);
-    ~TreeNode();
+    TreeNode();//default
+    TreeNode(int k, T* d); //overloaded
+    ~TreeNode();//destructor
     //virtuall ~destructor
 
     int key;

@@ -11,7 +11,7 @@ class LinkedList{
     int search(T val); //return position of ListNode
     T remove(T val);
     bool searchBool(T val);
-    void removeAtPos(int pos);
+    void removeAtPos(int pos); //had to use this intead of remove() for seg fault
 
     unsigned int getSize();
     bool isEmpty();

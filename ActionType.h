@@ -1,10 +1,11 @@
 #include <iostream>
 using namespace std;
 
+//action type object
 class ActionType{
   public:
-    ActionType();
-    ActionType(string type);
+    ActionType(); //default
+    ActionType(string type); //overloaded
 
     string getType();
 

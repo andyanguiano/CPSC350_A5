@@ -1,6 +1,7 @@
 #include "BST.h"
 #include "Rollback.h"
 
+//runs the simulation
 class DataBaseSim{
   public:
     DataBaseSim();
@@ -25,7 +26,7 @@ class DataBaseSim{
 
     BST<Student>* getStudetTree();
     BST<Faculty>* getFacultyTree();
-
+    //used for rollback
     void deleteStudentRollback(Student* s);
     void addStudentRollback(Student *s);
     void deleteFacultyRollBack(Faculty* f);

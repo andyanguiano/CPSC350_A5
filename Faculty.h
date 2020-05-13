@@ -2,12 +2,14 @@
 #define FACULTY_H
 #include "LinkedList.h"
 
+//faculty object
 class Faculty{
   public:
-    Faculty();
-    Faculty(int id, string name, string level, string department);
-    ~Faculty();
+    Faculty();//default
+    Faculty(int id, string name, string level, string department);//overlaoded
+    ~Faculty();//destructor
 
+    //getters setters
     void setID(int id);
     int getID();
 
@@ -23,9 +25,9 @@ class Faculty{
     void setAdvisees(LinkedList<int>* advisees);
     LinkedList<int>* getAdvisees();
 
-    string adviseesForFile();
+    string adviseesForFile();//returns a string to print to the file to save
 
-    int comapareTo(Faculty *f);
+    int comapareTo(Faculty *f);//compare faculty members
 
   private:
     int m_id;

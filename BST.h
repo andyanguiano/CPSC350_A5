@@ -1,24 +1,25 @@
 #include "TreeNode.h"
 
+//implementation of BST
 template <class T>
 class BST{
   public:
-    BST();
-    ~BST();
+    BST();//destructor
+    ~BST();//destructor
     //virtual destructor
 
-    void insert(int k, T* data);
-    T* search(int value);
-    bool deleteNode(int k);
+    void insert(int k, T* data);//insert to BST
+    T* search(int value);//search and return
+    bool deleteNode(int k);//delete from BST
 
-    bool isEmpty();
-    TreeNode<T>* getMin();
-    TreeNode<T>* getMax();
+    bool isEmpty();//check if empty
+    TreeNode<T>* getMin();//get min
+    TreeNode<T>* getMax();//get max
     TreeNode<T>* getSuccessor(TreeNode<T>* d);
-    void printTree(TreeNode<T> *node);
-    T* traverse(TreeNode<T> *node);
+    void printTree(TreeNode<T> *node); //goes through tree to print
+    T* traverse(TreeNode<T> *node); //goes through tree
 
-    TreeNode<T>* getRoot();
+    TreeNode<T>* getRoot(); //returns root node
 
   private:
     TreeNode<T> *root;

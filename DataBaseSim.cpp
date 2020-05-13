@@ -269,7 +269,7 @@ void DataBaseSim::addStudent(){
     if(f != NULL){
       f->getAdvisees()->insertFront(id);
       Student* s = new Student(id, name, level, major, gpa, advisor);
-      //m_rollback->addStudentAction(s, "delete student");
+      //m_rollback->addStudentAction(s, "delete student"); SEG FAULT
       m_students->insert(id, s);
       cout << "Student added to database." << endl;
       cout << endl;
@@ -284,6 +284,7 @@ void DataBaseSim::addStudent(){
 }
 
 void DataBaseSim::deleteStudent(){
+  //print students options
   TreeNode<Student>* root = m_students->getRoot();
   if(root == NULL){
     cout << "Students database is empty." << endl;
@@ -303,8 +304,9 @@ void DataBaseSim::deleteStudent(){
     if(s->getAdvisor() != 0){
       int facultyID = s->getAdvisor();
       m_students->deleteNode(id);
-      //m_rollback->addStudentAction(s, "add student");
+      //m_rollback->addStudentAction(s, "add student"); SEG FAULT
       Faculty* f = m_faculty->search(facultyID);
+      //needed to change to remove at position to fix seg fault
       int pos = f->getAdvisees()->search(id);
       f->getAdvisees()->removeAtPos(pos);
     }
@@ -331,7 +333,7 @@ void DataBaseSim::addFaculty(){
   cin >> department;
   Faculty* f = new Faculty(id, name, level, department);
   m_faculty->insert(id, f);
-  //m_rollback->addFacultyAction(f, "add faculty");
+  //m_rollback->addFacultyAction(f, "add faculty"); SEG FAULT
   cout << "Faculty memeber added." << endl;
 }
 
@@ -354,7 +356,6 @@ void DataBaseSim::deleteFaculty(){
 
   if(f != NULL){
     Faculty* temp = f;
-    //m_faculty->deleteNode(id);
     cout << "Deleted Faculty Member." << endl;
     if(!temp->getAdvisees()->isEmpty()){
       if(!m_faculty->isEmpty()){
@@ -415,6 +416,7 @@ void DataBaseSim::changeAdvisor(){
     if(f != NULL){
       m_students->search(studentID)->setAdvisor(facultyID);
       Faculty* oldF = m_faculty->search(currAdvisor);
+      //changed to remove at pos to fix seg fault
       int pos = oldF->getAdvisees()->search(studentID);
       f->getAdvisees()->removeAtPos(pos);
       cout << "Changed Advisors." << endl;
@@ -428,6 +430,7 @@ void DataBaseSim::changeAdvisor(){
 }
 
 void DataBaseSim::removeAdvisee(){
+  //print faulty members
   TreeNode<Faculty>* root = m_faculty->getRoot();
   if(root == NULL){
     cout << "Faculty database is empty" << endl;
@@ -450,6 +453,7 @@ void DataBaseSim::removeAdvisee(){
     cout << "Which advisee would your like to remove?(ID): ";
     cin >> rmid;
     cout << endl;
+    //remove at pos for seg fault
     int pos = f->getAdvisees()->search(id);
     f->getAdvisees()->removeAtPos(pos);
     cout << "Removed the advisee." << endl;
@@ -460,6 +464,7 @@ void DataBaseSim::removeAdvisee(){
 }
 
 void DataBaseSim::rollBack(){
+  //does not work
   if(m_rollback->isEmpty()){
     cout << "There are no actions to undo." << endl;
   }else{

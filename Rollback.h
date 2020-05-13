@@ -3,20 +3,21 @@
 #include "Faculty.h"
 #include "ActionType.h"
 
+//rollback action
 class Rollback{
   public:
-    Rollback();
-    ~Rollback();
+    Rollback(); //constructor
+    ~Rollback(); //destructor
 
-    void addStudentAction(Student* s, string type);
-    void addFacultyAction(Faculty* f, string type);
+    void addStudentAction(Student* s, string type); //adds to stacks SEG FAULT
+    void addFacultyAction(Faculty* f, string type); //adds to stacks SEG FAULT
 
-    string undo();
+    string undo(); //sees last action
 
-    Student* popStudent();
-    Faculty* popFaculty();
+    Student* popStudent(); //removes last student
+    Faculty* popFaculty(); //removes last faculty
 
-    bool isEmpty();
+    bool isEmpty(); //checks if empty
 
   private:
     GenStack<Student>* m_studentStack;

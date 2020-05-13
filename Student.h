@@ -4,12 +4,13 @@
 #include <iostream>
 using namespace std;
 
+//student object
 class Student{
   public:
-    Student();
-    Student(int id, string name, string level, string major, double gpa, int advisor);
-    ~Student();
-
+    Student(); //default
+    Student(int id, string name, string level, string major, double gpa, int advisor); //overlaoded
+    ~Student(); //destructor
+    //gettters setters
     void setID(int id);
     int getID();
 
@@ -28,7 +29,7 @@ class Student{
     void setAdvisor(int advisor);
     int getAdvisor();
 
-    int compareTo(Student* s);
+    int compareTo(Student* s);//compare student ids
 
   private:
     int m_id;

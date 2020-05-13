@@ -1,6 +1,3 @@
-//Andy Anguiano
-//2316199
-//aanguiano@champman.edu
 //CPSC 350-02
 //Assignemnt 5
 
@@ -38,11 +35,11 @@ class GenStack{
 //default constructor
 template <class T>
 GenStack<T>::GenStack(){
-  myArray = new T*[1000];
-  for(int i = 0; i < 1000; ++i){
+  myArray = new T*[500];
+  for(int i = 0; i < 500; ++i){
     myArray[i] = new T();
   }
-  mSize = 1000;
+  mSize = 500;
   top = -1;
 }
 

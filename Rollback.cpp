@@ -1,8 +1,8 @@
 #include "Rollback.h"
 
 Rollback::Rollback(){
-  m_studentStack = new GenStack<Student>();
-  m_facultyStack = new GenStack<Faculty>();
+  m_studentStack = new GenStack<Student>(5);
+  m_facultyStack = new GenStack<Faculty>(5);
   m_actionStack = new GenStack<ActionType>(5);
 }
 
@@ -31,10 +31,7 @@ void Rollback::addStudentAction(Student* s, string type){
 
 void Rollback::addFacultyAction(Faculty* f, string type){
   //SEG FAULT
-  cout << m_actionStack->isEmpty() << endl;
-  cout << "1" << endl;
   if(m_actionStack->isFull()){
-    cout << "in here?" << endl;
     GenStack<ActionType>* temp = new GenStack<ActionType>(5);
     for(int i = 0; i < 5; ++i){
       temp->push(m_actionStack->pop());
@@ -44,7 +41,6 @@ void Rollback::addFacultyAction(Faculty* f, string type){
       m_actionStack->push(temp->pop());
     }
   }
-  cout << "2" << endl;
   m_facultyStack->push(f);
   ActionType* action = new ActionType(type);
   m_actionStack->push(action);
